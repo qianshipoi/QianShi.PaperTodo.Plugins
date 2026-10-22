@@ -30,13 +30,45 @@ QianShi.PaperTodo.Plugins\               本仓库根目录
 ├─ build\
 │  └─ Build-And-Install-NativePlugin.ps1 通用打包 + 安装脚本（自动发现 src\ 下所有插件）
 ├─ dist\                                 打包产物（自动生成）
-├─ PaperTodo\                            PaperTodo 官方源代码（外部依赖，插件不改它）
+├─ PaperTodo\                            PaperTodo 官方源码（**git 子模块**，钉在固定提交）
+├─ .gitmodules                           子模块声明（path = PaperTodo，url = 官方仓库，branch = main）
+├─ .gitattributes / .gitignore
 └─ README.md                             本文件
 ```
 
 > 解决方案用新版 `.slnx` 格式（XML、可读、结构即目录）：.NET 9+ 的 `dotnet build` / `dotnet sln`
 > 和 VS 2022 17.13+、Rider 都能直接打开。它把外部契约项目放在 `PaperTodo` 文件夹下，
 > 便于 F12 跳转，同时一眼能看出那不是本仓库的代码。
+
+### 官方源码作为 git 子模块
+
+`PaperTodo\` 是本仓库的 **git 子模块**，不是散落在仓库里的一份拷贝：
+
+- 子模块只记录**一个提交指针**，官方源码的内容不进入本仓库历史；本仓库只维护 `src\` / `tests\` / `build\`。
+- 插件编译期引用的就是这份被钉住的源码（`..\..\PaperTodo\PaperTodo.Plugin.Abstractions\`），
+  所以"编译时的契约版本"永远是确定的、可复现的。
+
+全新克隆：
+
+```powershell
+git clone --recurse-submodules <本仓库地址>
+# 已经克隆过但忘了子模块：
+git submodule update --init --recursive
+```
+
+> `--recursive` 是必需的：官方源码自己还带一个 `vendor\wpf-notifyicon` 子模块，
+> 缺了它宿主源码编译不过（插件本身编译不受影响）。
+
+主动升级宿主版本（**升级后必须重跑检查程序**，因为契约可能变）：
+
+```powershell
+git submodule update --remote PaperTodo      # 拉到 .gitmodules 里配置的 main 最新
+git add PaperTodo                            # 记录新的提交指针
+git commit -m "chore: 升级 PaperTodo 子模块"
+```
+
+如果宿主的契约只在一份本地改动里（还没推到远端），把那份改动推到官方仓库/你的 fork，
+再用同一个提交指针，否则别人 `submodule update` 拿不到那份代码。
 
 ### 新增一个插件
 
@@ -198,6 +230,15 @@ pwsh -ExecutionPolicy Bypass -File .\build\Build-And-Install-NativePlugin.ps1 -S
 > `-InstallTo` 默认等于 `-PaperTodoRoot`。从源码运行 PaperTodo 时，`PaperTodo.csproj` 会把
 > `plugins\**` 复制到 `输出\<版本>\`，所以装到 `PaperTodo\plugins\` 后重新构建即可；
 > 发布产物不捆绑插件，这一点与官方约定一致。
+
+> **子模块洁净提示**：`PaperTodo` 现在是 git 子模块。日常部署建议直接用
+> `-InstallTo 'PaperTodo\输出\<版本>'` 装到构建产物里，这样官方源码子模块保持干净、
+> 不产生未跟踪文件。若确实要装进 `PaperTodo\plugins\`（让宿主编译时就带上插件），
+> 它会在子模块里显示为未跟踪；本地可以用一条命令隐藏：
+>
+> ```powershell
+> Add-Content PaperTodo\.git\info\exclude "`n/plugins/qianshi.archive.native/"
+> ```
 
 ---
 

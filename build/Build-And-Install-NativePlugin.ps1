@@ -154,7 +154,12 @@ $PaperTodoRoot = Resolve-FullPath -Value $PaperTodoRoot -BaseDirectory $repoRoot
 # the build is only packaged and not installed.
 $abstractionsProject = Join-Path $PaperTodoRoot "PaperTodo.Plugin.Abstractions\PaperTodo.Plugin.Abstractions.csproj"
 if (-not (Test-Path -LiteralPath $abstractionsProject -PathType Leaf)) {
-    throw "PaperTodo plugin contract project not found: $abstractionsProject"
+    $hint = ""
+    if (Test-Path -LiteralPath (Join-Path $repoRoot ".gitmodules") -PathType Leaf) {
+        $hint = "`nPaperTodo is a git submodule of this repository. Initialise it first:" +
+            "`n    git submodule update --init --recursive"
+    }
+    throw "PaperTodo plugin contract project not found: $abstractionsProject$hint"
 }
 
 if (-not $SkipInstall) {
