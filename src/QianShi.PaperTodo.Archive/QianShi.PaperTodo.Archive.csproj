@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>QianShi.PaperTodo.Archive</AssemblyName>
+    <RootNamespace>QianShi.PaperTodo.Archive</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- TargetFramework/Nullable/ImplicitUsings/LangVersion come from ..\Directory.Build.props. -->
+    <!-- The host contract project comes from the external PaperTodo checkout next to this repo. -->
+    <ProjectReference Include="..\..\PaperTodo\PaperTodo.Plugin.Abstractions\PaperTodo.Plugin.Abstractions.csproj" />
+  </ItemGroup>
+  <!-- The archive/restore business types are internal on purpose; the check program needs them. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="QianShi.PaperTodo.Archive.Tests" />
+    <InternalsVisibleTo Include="QianShi.PaperTodo.Archive.Checks" />
+  </ItemGroup>
+</Project>

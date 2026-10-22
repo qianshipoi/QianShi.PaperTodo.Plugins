@@ -1,0 +1,6 @@
+# Keep the submodule definition LF so it behaves identically on every machine.
+* text=auto
+.gitmodules text eol=lf
+
+# Generated plugin packages and build output are never tracked.
+dist/** -text

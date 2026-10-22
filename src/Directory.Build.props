@@ -1,0 +1,25 @@
+<Project>
+  <!--
+    Shared settings for every plugin project under src/.
+    Deliberately scoped to src/ so the external PaperTodo checkout (which lives one level up and
+    has its own build rules) is never affected by this repository.
+
+    A new plugin therefore only needs its own identity: AssemblyName, RootNamespace, Version and
+    the ProjectReference to the host contract project. UseWPF stays per project because a plugin
+    that does not render a WPF surface should not be forced to reference WPF.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Final plugin packages must not ship PDB/XML; the packaging script also strips them. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+</Project>

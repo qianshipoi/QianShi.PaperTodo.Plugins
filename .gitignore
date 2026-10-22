@@ -1,0 +1,13 @@
+# Build output
+bin/
+obj/
+dist/
+.artifacts/
+
+# Plugin-local data produced at runtime by PaperTodo
+**/.runtime/
+
+# Editor / OS noise
+.vs/
+*.user
+Thumbs.db

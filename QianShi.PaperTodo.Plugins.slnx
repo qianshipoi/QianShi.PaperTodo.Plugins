@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/PaperTodo/">
+    <Project Path="PaperTodo/PaperTodo.Plugin.Abstractions/PaperTodo.Plugin.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/QianShi.PaperTodo.Archive/QianShi.PaperTodo.Archive.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/QianShi.PaperTodo.Archive.Checks/QianShi.PaperTodo.Archive.Checks.csproj" />
+  </Folder>
+</Solution>

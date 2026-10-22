@@ -1,0 +1,141 @@
+{
+  "kind": "native",
+  "id": "qianshi.archive.native",
+  "name": "卡片归档",
+  "description": "把待办卡片和笔记卡片归档到插件本地：只从界面移除、不删除数据，随时一键恢复；并持续备份内容，宿主里误删的卡片也能找回。",
+  "version": "1.0.0",
+  "apiVersion": "2.2",
+  "stateVersion": 1,
+  "maxPaperInstances": 1,
+  "entry": "QianShi.PaperTodo.Archive.dll",
+  "capabilities": [
+    "runtime"
+  ],
+  "permissions": [
+    "papers.read",
+    "papers.observe",
+    "papers.create",
+    "papers.delete",
+    "todos.read",
+    "todos.observe",
+    "todos.append",
+    "todos.update",
+    "todos.delete",
+    "notes.read",
+    "notes.observe",
+    "notes.append",
+    "notes.replace"
+  ],
+  "settingCategories": [
+    {
+      "name": "归档",
+      "column": "left"
+    },
+    {
+      "name": "备份与恢复",
+      "column": "right"
+    },
+    {
+      "name": "界面",
+      "column": "right"
+    }
+  ],
+  "settings": [
+    {
+      "id": "autoStart",
+      "type": "boolean",
+      "name": "启动时保持归档服务运行",
+      "description": "在后台保留一个隐藏的归档中心卡片，让插件能持续备份和记录删除。关闭后必须手动打开归档中心才会恢复备份。",
+      "default": true,
+      "category": "归档"
+    },
+    {
+      "id": "autoBackup",
+      "type": "boolean",
+      "name": "持续备份卡片内容",
+      "description": "随时把待办条目和笔记正文备份到插件目录；关闭后只有归档时才会保存快照，宿主里直接删除的卡片可能无法恢复。",
+      "default": true,
+      "category": "备份与恢复"
+    },
+    {
+      "id": "topBarAction",
+      "type": "boolean",
+      "name": "在每张卡片顶栏显示归档按钮",
+      "description": "在任意待办或笔记卡片的顶栏增加一个归档按钮，点击即把该卡片从界面移除并保留全部数据。",
+      "default": true,
+      "category": "界面"
+    },
+    {
+      "id": "contextMenuAction",
+      "type": "boolean",
+      "name": "在卡片右键菜单显示归档项",
+      "description": "在卡片的右键菜单里提供“归档此卡片”和“打开归档中心”。",
+      "default": true,
+      "category": "界面"
+    },
+    {
+      "id": "lockArchivedHidden",
+      "type": "boolean",
+      "name": "归档锁定：保持已归档卡片隐藏",
+      "description": "开启后，用托盘双击、「显示全部」或显示快捷键把卡片翻出来时，已归档的卡片会立刻重新收回。要真正显示请用归档中心的「恢复」。",
+      "default": true,
+      "category": "归档"
+    },
+    {
+      "id": "captureHostDeletes",
+      "type": "boolean",
+      "name": "接管宿主删除（回收站）",
+      "description": "当你在 PaperTodo 里直接删除卡片或待办条目时，把被删除的内容留在回收站，可一键恢复。",
+      "default": true,
+      "category": "备份与恢复"
+    },
+    {
+      "id": "retentionDays",
+      "type": "number",
+      "name": "回收站保留天数",
+      "description": "0 表示永久保留。已归档卡片从不自动清理。",
+      "default": 0,
+      "min": 0,
+      "max": 3650,
+      "step": 30,
+      "suffix": "天",
+      "category": "备份与恢复"
+    },
+    {
+      "id": "maxEntries",
+      "type": "number",
+      "name": "最多保留历史条目",
+      "description": "限制回收站与已恢复记录的总条数，超出后清理最旧的记录。",
+      "default": 500,
+      "min": 50,
+      "max": 5000,
+      "step": 50,
+      "suffix": "条",
+      "category": "备份与恢复"
+    },
+    {
+      "id": "keepRestored",
+      "type": "boolean",
+      "name": "保留已恢复记录",
+      "description": "恢复后仍然在“已恢复”列表里保留一条记录，便于回查。",
+      "default": true,
+      "category": "备份与恢复"
+    },
+    {
+      "id": "showCountInCapsule",
+      "type": "boolean",
+      "name": "胶囊显示归档数量",
+      "description": "归档中心卡片折叠成胶囊时显示当前已归档与回收站数量。",
+      "default": true,
+      "category": "界面"
+    }
+  ],
+  "advancedSettings": true,
+  "primarySettings": 3,
+  "startupPaper": {
+    "enabledSetting": "autoStart",
+    "instanceKey": "center",
+    "presentation": "hidden",
+    "title": "归档中心"
+  }
+}
